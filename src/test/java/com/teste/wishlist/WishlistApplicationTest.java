@@ -15,4 +15,9 @@ class WishlistApplicationTest {
         assertNotNull(context);
         context.close();
     }
+
+    @Test
+    void mainApplication() {
+        WishlistApplication.main(new String[] {});
+    }
 }
