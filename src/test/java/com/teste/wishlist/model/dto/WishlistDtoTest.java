@@ -1,6 +1,7 @@
 package com.teste.wishlist.model.dto;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.util.Arrays;
 import java.util.Set;
@@ -94,5 +95,45 @@ class WishlistDtoTest {
 
         String expected = "WishlistDto(total=2, userId=user1, productEans=[1234567890123, 2345678901234])";
         assertEquals(expected, wishlistDto.toString());
+    }
+
+    @Test
+    void testTotalWhenProductEansIsNull() {
+        WishlistDto wishlistDto = new WishlistDto();
+        wishlistDto.setProductEans(null);
+
+        assertEquals(0, wishlistDto.getTotal());
+    }
+
+    @Test
+    void testTotalWhenProductEansIsNotNull() {
+        WishlistDto wishlistDto = new WishlistDto();
+        wishlistDto.setProductEans(Arrays.asList("1234567890123", "2345678901234"));
+
+        assertEquals(2, wishlistDto.getTotal());
+    }
+
+    @Test
+    void testBuilderWhenProductEansIsNull() {
+        WishlistDto wishlistDto = WishlistDto.builder()
+                .userId("user1")
+                .productEans(null)
+                .build();
+
+        assertEquals(0, wishlistDto.getTotal());
+        assertEquals("user1", wishlistDto.getUserId());
+        assertNull(wishlistDto.getProductEans());
+    }
+
+    @Test
+    void testBuilderWhenProductEansIsNotNull() {
+        WishlistDto wishlistDto = WishlistDto.builder()
+                .userId("user1")
+                .productEans(Arrays.asList("1234567890123", "2345678901234"))
+                .build();
+
+        assertEquals(2, wishlistDto.getTotal());
+        assertEquals("user1", wishlistDto.getUserId());
+        assertEquals(Arrays.asList("1234567890123", "2345678901234"), wishlistDto.getProductEans());
     }
 }
