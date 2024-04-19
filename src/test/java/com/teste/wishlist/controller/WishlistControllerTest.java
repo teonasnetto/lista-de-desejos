@@ -4,6 +4,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.Collections;
@@ -100,6 +101,20 @@ class WishlistControllerTest extends AbstractMongoDBTest {
 
                 mockMvc.perform(get("/wishlists/userId")
                                 .contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(status().isOk());
+        }
+
+        @Test
+        void testIsProductInWishlist() throws Exception {
+                String userId = "user1";
+                String ean = "1234567890123";
+
+                when(wishlistService.isProductInWishlist(userId, ean)).thenReturn(true);
+
+                mockMvc.perform(get("/wishlists/" + userId + "/product/"
+                                + ean)
+                                .contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(content().string("true"))
                                 .andExpect(status().isOk());
         }
 }

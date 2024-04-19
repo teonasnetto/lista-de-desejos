@@ -1,6 +1,7 @@
 package com.teste.wishlist.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -153,6 +154,21 @@ class WishlistServiceTest {
         List<ProductEntity> products = wishlistService.getProductByuserId(userId);
 
         assertTrue(products.isEmpty());
+    }
+
+    @Test
+    void testIsProductInWishlist() {
+        String userId = "user1";
+        String eanInWishlist = "1234567890123";
+        String eanNotInWishlist = "2345678901234";
+
+        WishListEntity wishlist = new WishListEntity(userId);
+        wishlist.setProductEans(Arrays.asList(eanInWishlist));
+
+        when(wishlistRepository.findByuserId(userId)).thenReturn(wishlist);
+
+        assertTrue(wishlistService.isProductInWishlist(userId, eanInWishlist));
+        assertFalse(wishlistService.isProductInWishlist(userId, eanNotInWishlist));
     }
 
 }

@@ -90,4 +90,14 @@ public class WishlistController {
         return ResponseEntity.ok(productDtos);
 
     }
+
+    @GetMapping("/{userId}/product/{ean}")
+    @Operation(summary = "Check if a product is in the user's wishlist", description = "Check if a product is in the user's wishlist by user ID and product EAN")
+    @ApiResponse(responseCode = "200", description = "Return true if the product is in the wishlist, false otherwise")
+    @ApiResponse(responseCode = "404", description = "Not found")
+    @ApiResponse(responseCode = "500", description = "Internal server error")
+    public ResponseEntity<Boolean> isProductInWishlist(@PathVariable String userId, @PathVariable String ean) {
+        boolean isProductInWishlist = wishlistService.isProductInWishlist(userId, ean);
+        return ResponseEntity.ok(isProductInWishlist);
+    }
 }

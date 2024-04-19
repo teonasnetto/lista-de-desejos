@@ -1,15 +1,15 @@
 package com.teste.wishlist.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.teste.wishlist.model.ProductEntity;
 import com.teste.wishlist.model.WishListEntity;
 import com.teste.wishlist.repository.ProductRepository;
 import com.teste.wishlist.repository.WishlistRepository;
 import com.teste.wishlist.service.interfaces.IWishlistService;
-
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class WishlistService implements IWishlistService {
@@ -66,5 +66,13 @@ public class WishlistService implements IWishlistService {
             return products;
         }
         return new ArrayList<>();
+    }
+
+    public boolean isProductInWishlist(String userId, String ean) {
+        WishListEntity wishlist = wishlistRepository.findByuserId(userId);
+        if (wishlist != null) {
+            return wishlist.getProductEans().contains(ean);
+        }
+        return false;
     }
 }
