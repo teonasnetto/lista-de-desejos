@@ -19,7 +19,7 @@ public class ProductEntity {
         this.name = name;
         this.description = description;
         this.price = price;
-        this.created = java.time.LocalDateTime.now().toString();
+        this.created = java.time.LocalDateTime.now().truncatedTo(java.time.temporal.ChronoUnit.SECONDS).toString();
     }
 
     @Id
