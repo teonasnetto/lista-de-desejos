@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.Collections;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,11 @@ class WishlistControllerTest extends AbstractMongoDBTest {
         private WishlistService wishlistService;
         @MockBean
         private ModelMapper modelMapper;
+
+        @AfterAll
+        static void tearDown() {
+                mongodExecutable.stop();
+        }
 
         @Test
         void getAllWishlistsTest() throws Exception {

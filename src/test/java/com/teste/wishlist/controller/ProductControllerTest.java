@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.Collections;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,11 @@ class ProductControllerTest extends AbstractMongoDBTest {
     private ProductService productService;
     @MockBean
     private ModelMapper modelMapper;
+
+    @AfterAll
+    static void tearDown() {
+        mongodExecutable.stop();
+    }
 
     @Test
     void getAllProductsTest() throws Exception {

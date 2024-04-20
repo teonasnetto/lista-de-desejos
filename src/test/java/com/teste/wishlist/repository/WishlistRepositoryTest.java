@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Optional;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,11 @@ class WishlistRepositoryTest extends AbstractMongoDBTest {
     @BeforeEach
     void setUp() {
         wishlistRepository.deleteAll();
+    }
+
+    @AfterAll
+    static void tearDown() {
+        mongodExecutable.stop();
     }
 
     @Test
