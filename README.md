@@ -88,7 +88,17 @@ Para executar os testes com o SonarQube, execute o comando abaixo:
 
 Após a execução dos testes, acesse o endereço [``http://localhost:9000``](http://localhost:9000) e faça login com as credenciais ``admin:admin`` (você terá que alterar a senha na primeira vez que fizer login). Em seguida, acesse o projeto criado e veja o relatório de qualidade do código, como na imagem abaixo:
 
-![SonarQube](assets/sonarqube_test.jpg)
+![SonarQube](assets/sonarQube_test.jpg)
+
+# Teste de integração CI/CD
+
+O projeto está configurado para executar testes de integração CI/CD com o GitHub Actions. Acesse o arquivo [``.github/workflows/ci-cd.yml``](.github/workflows/ci-cd.yml) para ver a configuração.
+
+### Processo de CI (Integração Contínua)
+Ao fazer um push no repositório, o GitHub Actions irá executar o processo de CI, que consiste em:
+- Compilar o projeto
+- Executar os testes
+
 
 ## Autor
 
