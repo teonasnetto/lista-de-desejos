@@ -1,19 +1,5 @@
 package com.teste.gatewayserver.config;
 
-import io.micrometer.common.util.StringUtils;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
-import org.springframework.http.HttpHeaders;
-import org.springframework.web.reactive.function.client.WebClient;
-
-import com.teste.gatewayserver.dto.UserValidationResponse;
-import com.teste.gatewayserver.exception.InvalidCredentialsException;
-
-import org.springframework.cloud.gateway.filter.GatewayFilter;
-import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.stereotype.Component;
-import reactor.core.publisher.Mono;
-
 import static com.teste.gatewayserver.constants.AppConstants.BEARER;
 import static com.teste.gatewayserver.constants.ErrorMessage.INVALID_TOKEN;
 import static com.teste.gatewayserver.constants.ErrorMessage.MISSING_AUTHORIZATION_HEADER;
@@ -28,6 +14,20 @@ import static com.teste.gatewayserver.constants.WebClientConstants.USER_SERVER;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
+
+import org.springframework.cloud.gateway.filter.GatewayFilter;
+import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.client.WebClient;
+
+import com.teste.gatewayserver.dto.UserValidationResponse;
+import com.teste.gatewayserver.exception.InvalidCredentialsException;
+
+import io.micrometer.common.util.StringUtils;
+import lombok.extern.slf4j.Slf4j;
+import reactor.core.publisher.Mono;
 
 @Slf4j
 @Component

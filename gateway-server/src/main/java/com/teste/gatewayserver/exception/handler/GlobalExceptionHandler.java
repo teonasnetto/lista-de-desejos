@@ -1,15 +1,5 @@
 package com.teste.gatewayserver.exception.handler;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.reactive.result.method.annotation.ResponseEntityExceptionHandler;
-
-import com.teste.gatewayserver.exception.ApiException;
-import com.teste.gatewayserver.exception.InvalidCredentialsException;
-
 import static com.teste.gatewayserver.constants.AppConstants.ERRORS;
 import static com.teste.gatewayserver.constants.AppConstants.ERROR_CODE;
 import static com.teste.gatewayserver.constants.AppConstants.MESSAGE;
@@ -21,6 +11,16 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.reactive.result.method.annotation.ResponseEntityExceptionHandler;
+
+import com.teste.gatewayserver.exception.ApiException;
+import com.teste.gatewayserver.exception.InvalidCredentialsException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
