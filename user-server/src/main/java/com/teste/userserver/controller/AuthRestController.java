@@ -22,6 +22,8 @@ import com.teste.userserver.dto.security.UserValidationResponse;
 import com.teste.userserver.mapper.UserMapper;
 import com.teste.userserver.service.AuthService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -39,6 +41,10 @@ public class AuthRestController {
                 .map(userMapper::mapUserToRegistrationResponse);
     }
 
+    @Operation(summary = "Get all products", description = "Read all products from the database")
+    @ApiResponse(responseCode = "200", description = "Return all products")
+    @ApiResponse(responseCode = "404", description = "Not found")
+    @ApiResponse(responseCode = "500", description = "Internal server error")
     @PostMapping(SIGN_IN)
     public Mono<AuthResponseDto> handleSignIn(@RequestBody AuthRequestDto dto) {
         return authService.authenticate(dto.getUsername(), dto.getPassword())

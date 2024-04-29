@@ -7,10 +7,14 @@ import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRep
 
 import com.github.cloudyrock.spring.v5.EnableMongock;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
+
 @EnableMongock
 @EnableReactiveMongoRepositories
 @EnableDiscoveryClient
 @SpringBootApplication
+@OpenAPIDefinition(info = @Info(title = "Wishlist API", version = "1.0", description = "Wishlist API"))
 public class WishlistApplication {
 
 	public static void main(String[] args) {
