@@ -48,7 +48,7 @@ class WishlistServiceTest {
         WishListEntity wishlist2 = new WishListEntity("user2");
         when(wishlistRepository.findAll()).thenReturn(Flux.just(wishlist1, wishlist2));
 
-        List<WishListEntity> wishlists = wishlistService.getAllWishlists();
+        List<WishListEntity> wishlists = wishlistService.getAllWishlists().collectList().block();
 
         assertEquals(2, wishlists.size());
         verify(wishlistRepository, times(1)).findAll();
@@ -65,7 +65,8 @@ class WishlistServiceTest {
         when(wishlistRepository.findByuserId(userId)).thenReturn(Mono.just(wishlist));
         when(wishlistRepository.save(any(WishListEntity.class))).thenReturn(Mono.just(wishlist));
 
-        WishListEntity updatedWishlist = wishlistService.addProductToWishlist(userId, productEan);
+        Mono<WishListEntity> updatedWishlistMono = wishlistService.addProductToWishlist(userId, productEan);
+        WishListEntity updatedWishlist = updatedWishlistMono.block();
 
         assertEquals(wishlist, updatedWishlist);
         verify(wishlistRepository, times(1)).save(wishlist);
@@ -80,7 +81,8 @@ class WishlistServiceTest {
         when(wishlistRepository.findByuserId(userId)).thenReturn(Mono.just(wishlist));
         when(wishlistRepository.save(any(WishListEntity.class))).thenReturn(Mono.just(wishlist));
 
-        WishListEntity updatedWishlist = wishlistService.removeProductFromWishlist(userId, productEan);
+        Mono<WishListEntity> updatedWishlistMono = wishlistService.removeProductFromWishlist(userId, productEan);
+        WishListEntity updatedWishlist = updatedWishlistMono.block();
 
         assertEquals(wishlist, updatedWishlist);
         verify(wishlistRepository, times(1)).save(wishlist);
@@ -143,7 +145,8 @@ class WishlistServiceTest {
         when(wishlistRepository.findByuserId(userId)).thenReturn(null);
         when(wishlistRepository.save(any(WishListEntity.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        WishListEntity updatedWishlist = wishlistService.addProductToWishlist(userId, productEan);
+        Mono<WishListEntity> updatedWishlistMono = wishlistService.addProductToWishlist(userId, productEan);
+        WishListEntity updatedWishlist = updatedWishlistMono.block();
 
         assertEquals(userId, updatedWishlist.getUserId());
         assertTrue(updatedWishlist.getProductEans().contains(productEan));
@@ -155,7 +158,7 @@ class WishlistServiceTest {
         String userId = "user1";
         when(wishlistRepository.findByuserId(userId)).thenReturn(null);
 
-        List<ProductEntity> products = wishlistService.getProductByuserId(userId);
+        List<ProductEntity> products = wishlistService.getProductByuserId(userId).collectList().block();
 
         assertTrue(products.isEmpty());
     }
@@ -171,8 +174,8 @@ class WishlistServiceTest {
 
         when(wishlistRepository.findByuserId(userId)).thenReturn(Mono.just(wishlist));
 
-        assertTrue(wishlistService.isProductInWishlist(userId, eanInWishlist));
-        assertFalse(wishlistService.isProductInWishlist(userId, eanNotInWishlist));
+        assertTrue(wishlistService.isProductInWishlist(userId, eanInWishlist).block());
+        assertFalse(wishlistService.isProductInWishlist(userId, eanNotInWishlist).block());
     }
 
 }

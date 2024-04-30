@@ -1,12 +1,14 @@
 package com.teste.wishlist.service.interfaces;
 
-import java.util.List;
 import com.teste.wishlist.model.WishListEntity;
 
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
 public interface IWishlistService {
-    List<WishListEntity> getAllWishlists();
+    Flux<WishListEntity> getAllWishlists();
 
-    WishListEntity addProductToWishlist(String userId, String ean);
+    Mono<WishListEntity> addProductToWishlist(String userId, String ean);
 
-    WishListEntity removeProductFromWishlist(String userId, String ean);
+    Mono<WishListEntity> removeProductFromWishlist(String userId, String ean);
 }

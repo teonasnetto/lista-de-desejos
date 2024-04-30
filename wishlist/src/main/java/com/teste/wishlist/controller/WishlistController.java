@@ -1,10 +1,6 @@
 package com.teste.wishlist.controller;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,14 +9,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.teste.wishlist.model.ProductEntity;
-import com.teste.wishlist.model.WishListEntity;
 import com.teste.wishlist.model.dto.ProductDto;
 import com.teste.wishlist.model.dto.WishlistDto;
 import com.teste.wishlist.service.WishlistService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/api/v1/wishlist/wishlists")
@@ -40,12 +36,9 @@ public class WishlistController {
     @ApiResponse(responseCode = "404", description = "Not found")
     @ApiResponse(responseCode = "500", description = "Internal server error")
     @GetMapping
-    public ResponseEntity<List<WishlistDto>> getAllWishlists() {
-        List<WishListEntity> wishlists = wishlistService.getAllWishlists();
-        List<WishlistDto> wishlistDtos = wishlists.stream()
-                .map(wishlist -> modelMapper.map(wishlist, WishlistDto.class))
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(wishlistDtos);
+    public Flux<WishlistDto> getAllWishlists() {
+        return wishlistService.getAllWishlists()
+                .map(wishlist -> modelMapper.map(wishlist, WishlistDto.class));
     }
 
     @Operation(summary = "Add a product to the wishlist")
@@ -53,11 +46,12 @@ public class WishlistController {
     @ApiResponse(responseCode = "404", description = "Not found")
     @ApiResponse(responseCode = "500", description = "Internal server error")
     @PostMapping("/{userId}/product/{ean}")
-    public ResponseEntity<Object> addProductToWishlist(@PathVariable String userId,
+    public Mono<ResponseEntity<WishlistDto>> addProductToWishlist(@PathVariable String userId,
             @PathVariable String ean) {
-        WishListEntity updatedWishlist = wishlistService.addProductToWishlist(userId, ean);
-        WishlistDto wishlistDto = modelMapper.map(updatedWishlist, WishlistDto.class);
-        return ResponseEntity.ok(wishlistDto);
+        return wishlistService.addProductToWishlist(userId, ean)
+                .map(wishlist -> modelMapper.map(wishlist, WishlistDto.class))
+                .map(ResponseEntity::ok)
+                .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
     @Operation(summary = "Remove a product from the wishlist")
@@ -65,39 +59,31 @@ public class WishlistController {
     @ApiResponse(responseCode = "404", description = "Not found")
     @ApiResponse(responseCode = "500", description = "Internal server error")
     @DeleteMapping("/{userId}/product/{ean}")
-    public ResponseEntity<Object> removeProductFromWishlist(@PathVariable String userId,
+    public Mono<ResponseEntity<WishlistDto>> removeProductFromWishlist(@PathVariable String userId,
             @PathVariable String ean) {
-        WishListEntity updatedWishlist = wishlistService.removeProductFromWishlist(userId, ean);
-        if (updatedWishlist != null) {
-            WishlistDto wishlistDto = modelMapper.map(updatedWishlist, WishlistDto.class);
-            return ResponseEntity.ok(wishlistDto);
-        }
-        return new ResponseEntity<>("Wishlist not found for user " + userId, HttpStatus.NOT_FOUND);
-
+        return wishlistService.removeProductFromWishlist(userId, ean)
+                .map(wishlist -> modelMapper.map(wishlist, WishlistDto.class))
+                .map(ResponseEntity::ok)
+                .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/{userId}")
     @Operation(summary = "Get products in wishlist by user ID", description = "Read all products in the wishlist by user ID")
     @ApiResponse(responseCode = "200", description = "Return all products in the wishlist")
     @ApiResponse(responseCode = "404", description = "Not found")
     @ApiResponse(responseCode = "500", description = "Internal server error")
-    public ResponseEntity<List<ProductDto>> getProductsInWishlistByuserID(@PathVariable String userId) {
-        List<ProductEntity> products = wishlistService.getProductByuserId(userId);
-
-        List<ProductDto> productDtos = products.stream()
-                .map(product -> modelMapper.map(product, ProductDto.class))
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(productDtos);
-
+    @GetMapping("/{userId}")
+    public Flux<ProductDto> getProductsInWishlistByuserID(@PathVariable String userId) {
+        return wishlistService.getProductByuserId(userId)
+                .map(product -> modelMapper.map(product, ProductDto.class));
     }
 
-    @GetMapping("/{userId}/product/{ean}")
     @Operation(summary = "Check if a product is in the user's wishlist", description = "Check if a product is in the user's wishlist by user ID and product EAN")
     @ApiResponse(responseCode = "200", description = "Return true if the product is in the wishlist, false otherwise")
     @ApiResponse(responseCode = "404", description = "Not found")
     @ApiResponse(responseCode = "500", description = "Internal server error")
-    public ResponseEntity<Boolean> isProductInWishlist(@PathVariable String userId, @PathVariable String ean) {
-        boolean isProductInWishlist = wishlistService.isProductInWishlist(userId, ean);
-        return ResponseEntity.ok(isProductInWishlist);
+    @GetMapping("/{userId}/product/{ean}")
+    public Mono<ResponseEntity<Boolean>> isProductInWishlist(@PathVariable String userId, @PathVariable String ean) {
+        return wishlistService.isProductInWishlist(userId, ean)
+                .map(ResponseEntity::ok);
     }
 }

@@ -27,6 +27,9 @@ import com.teste.wishlist.model.dto.ProductDto;
 import com.teste.wishlist.model.dto.WishlistDto;
 import com.teste.wishlist.service.WishlistService;
 
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs(outputDir = "target/snippets")
@@ -48,9 +51,8 @@ class WishlistControllerTest extends AbstractMongoDBTest {
         void getAllWishlistsTest() throws Exception {
                 WishListEntity wishlistEntity = new WishListEntity();
                 WishlistDto wishlistDto = new WishlistDto();
-                when(wishlistService.getAllWishlists()).thenReturn(Collections.singletonList(wishlistEntity));
-                when(modelMapper.map(wishlistEntity,
-                                WishlistDto.class)).thenReturn(wishlistDto);
+                when(wishlistService.getAllWishlists()).thenReturn(Flux.just(wishlistEntity));
+                when(modelMapper.map(wishlistEntity, WishlistDto.class)).thenReturn(wishlistDto);
 
                 mockMvc.perform(get("/wishlists")
                                 .contentType(MediaType.APPLICATION_JSON))
@@ -64,7 +66,7 @@ class WishlistControllerTest extends AbstractMongoDBTest {
                 when(modelMapper.map(wishlistDto,
                                 WishListEntity.class)).thenReturn(wishlistEntity);
                 when(wishlistService.addProductToWishlist("userId",
-                                "ean")).thenReturn(wishlistEntity);
+                                "ean")).thenReturn(Mono.just(wishlistEntity));
                 when(modelMapper.map(wishlistEntity,
                                 WishlistDto.class)).thenReturn(wishlistDto);
 
@@ -78,7 +80,7 @@ class WishlistControllerTest extends AbstractMongoDBTest {
                 WishlistDto wishlistDto = new WishlistDto();
                 WishListEntity wishlistEntity = new WishListEntity();
                 when(wishlistService.removeProductFromWishlist("userId",
-                                "ean")).thenReturn(wishlistEntity);
+                                "ean")).thenReturn(Mono.just(wishlistEntity));
                 when(modelMapper.map(wishlistEntity,
                                 WishlistDto.class)).thenReturn(wishlistDto);
 
@@ -101,7 +103,7 @@ class WishlistControllerTest extends AbstractMongoDBTest {
         void getProductsInWishlistByUserIdTest() throws Exception {
                 ProductEntity productEntity = new ProductEntity();
                 ProductDto productDto = new ProductDto();
-                when(wishlistService.getProductByuserId("userId")).thenReturn(Collections.singletonList(productEntity));
+                when(wishlistService.getProductByuserId("userId")).thenReturn(Flux.just(productEntity));
                 when(modelMapper.map(productEntity,
                                 ProductDto.class)).thenReturn(productDto);
 
@@ -115,7 +117,7 @@ class WishlistControllerTest extends AbstractMongoDBTest {
                 String userId = "user1";
                 String ean = "1234567890123";
 
-                when(wishlistService.isProductInWishlist(userId, ean)).thenReturn(true);
+                when(wishlistService.isProductInWishlist(userId, ean)).thenReturn(Mono.just(true));
 
                 mockMvc.perform(get("/wishlists/" + userId + "/product/"
                                 + ean)

@@ -36,20 +36,14 @@ public class ProductController {
         this.modelMapper = modelMapper;
     }
 
-    @GetMapping
     @Operation(summary = "Get all products", description = "Read all products from the database")
     @ApiResponse(responseCode = "200", description = "Return all products")
     @ApiResponse(responseCode = "404", description = "Not found")
     @ApiResponse(responseCode = "500", description = "Internal server error")
-    public ResponseEntity<List<ProductDto>> getAllProducts() {
-        Flux<ProductEntity> products = productService.getAllProducts();
-        List<ProductDto> productDtos = products.collectList()
-                .blockOptional()
-                .orElse(Collections.emptyList())
-                .stream()
-                .map(product -> modelMapper.map(product, ProductDto.class))
-                .toList();
-        return ResponseEntity.ok(productDtos);
+    @GetMapping
+    public Flux<ProductDto> getAllProducts() {
+        return productService.getAllProducts()
+                .map(product -> modelMapper.map(product, ProductDto.class));
     }
 
     @Operation(summary = "Create a product", description = "Create a product in the database")
@@ -57,13 +51,11 @@ public class ProductController {
     @ApiResponse(responseCode = "400", description = "Bad request")
     @ApiResponse(responseCode = "500", description = "Internal server error")
     @PostMapping
-    public ResponseEntity<Object> createProduct(@Valid @RequestBody ProductDto productRequestDto) {
-
+    public Mono<ResponseEntity<ProductDto>> createProduct(@Valid @RequestBody ProductDto productRequestDto) {
         ProductEntity product = modelMapper.map(productRequestDto, ProductEntity.class);
-        Mono<ProductEntity> createdProductMono = productService.createProduct(product);
-        ProductEntity createdProduct = createdProductMono.block();
-        ProductDto productDto = modelMapper.map(createdProduct, ProductDto.class);
-        return ResponseEntity.ok(productDto);
+        return productService.createProduct(product)
+                .map(createdProduct -> modelMapper.map(createdProduct, ProductDto.class))
+                .map(ResponseEntity::ok);
     }
 
 }
