@@ -38,7 +38,16 @@ spring:
         - id: user-server
           uri: lb://user-server
           predicates:
-            - Path=/api/v1/auth/**,/api/v1/user/**
+            - Path=/api/v1/auth/**,/api/v1/user/**, /api/v1/user-server/v3/api-docs
+
+springdoc:
+  swagger-ui:
+    urls:
+      - name: Wishlist Service APIs
+        url: /api/v1/wishlist/v3/api-docs
+      - name: User Service APIs
+        url: /api/v1/user-server/v3/api-docs
+
 logging:
   level:
     root: INFO

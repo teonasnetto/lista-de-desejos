@@ -36,6 +36,11 @@ eureka:
     serviceUrl:
       defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
 
+springdoc:
+  api-docs:
+    enabled: true
+    path: '/api/v1/user-server/v3/api-docs'
+
 jwt:
   password:
     encoder:
