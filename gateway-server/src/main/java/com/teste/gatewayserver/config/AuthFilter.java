@@ -4,6 +4,7 @@ import static com.teste.gatewayserver.constants.AppConstants.BEARER;
 import static com.teste.gatewayserver.constants.ErrorMessage.INVALID_TOKEN;
 import static com.teste.gatewayserver.constants.ErrorMessage.MISSING_AUTHORIZATION_HEADER;
 import static com.teste.gatewayserver.constants.PathConstants.API_V1_AUTH;
+import static com.teste.gatewayserver.constants.PathConstants.API_V1_WISHLIST;
 import static com.teste.gatewayserver.constants.PathConstants.AUTH_USERNAME_HEADER;
 import static com.teste.gatewayserver.constants.PathConstants.AUTH_USER_ID_HEADER;
 import static com.teste.gatewayserver.constants.PathConstants.SIGN_IN;
@@ -35,7 +36,8 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
 
     private final List<String> permittedEndpoints = List.of(
             API_V1_AUTH + SIGN_UP,
-            API_V1_AUTH + SIGN_IN);
+            API_V1_AUTH + SIGN_IN,
+            API_V1_WISHLIST);
 
     private final Predicate<ServerHttpRequest> isSecured = request -> permittedEndpoints.stream()
             .noneMatch(uri -> request.getURI().getPath().contains(uri));

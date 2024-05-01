@@ -18,6 +18,8 @@ public class PathConstants {
 
     public static final String API_V1_AUTH = API_V1 + AUTH;
 
+    public static final String API_V1_WISHLIST = API_V1 + "/wishlist";
+
     private PathConstants() {
 
     }
