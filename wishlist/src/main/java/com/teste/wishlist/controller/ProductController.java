@@ -1,8 +1,5 @@
 package com.teste.wishlist.controller;
 
-import java.util.Collections;
-import java.util.List;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
