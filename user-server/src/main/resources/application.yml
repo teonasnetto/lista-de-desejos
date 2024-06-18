@@ -1,0 +1,56 @@
+server:
+  port: 8083
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+
+spring:
+  cloud:
+    discovery:
+      enabled: true
+  data:
+    mongodb:
+      uri: ${SPRING_DATA_MONGODB_URI:mongodb://localhost:27017/user-service-mongodb}
+  application:
+    name: user-server
+  config:
+    import: optional:configserver:${CONFIG_SERVER_URI:http://localhost:8888}
+  profiles:
+    active:
+      - resilience4j
+
+mongock:
+  change-logs-scan-package: false
+  mongo-db:
+    write-concern:
+      journal: false
+    read-concern: local
+
+eureka:
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: '/api/v1/user-server/v3/api-docs'
+
+jwt:
+  password:
+    encoder:
+      secret: 3kD4gZ92pfwS27f9bFNhgbNcc_lBmn-pJL5BEWBY54h
+      iteration: 64
+      keylength: 256
+  secret: a3f69347b712b3a8edc08339f8d2b10482397d7g07gf31b599b8d4g92ff3b8f9
+  expiration: 3600
+  issuer: teste
+
+logging:
+  level:
+    root: INFO

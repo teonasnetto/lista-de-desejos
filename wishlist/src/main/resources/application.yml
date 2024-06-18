@@ -1,0 +1,46 @@
+server:
+  port : 8081
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+
+spring:
+  cloud:
+    discovery:
+      enabled: true
+  data:
+    mongodb:
+      uri: ${SPRING_DATA_MONGODB_URI:mongodb://localhost:27017/wishlist-mongodb}
+  application:
+    name: wishlist
+  config:
+    import: optional:configserver:${CONFIG_SERVER_URI:http://localhost:8888}
+  profiles:
+    active:
+      - resilience4j
+
+mongock:
+  change-logs-scan-package: false
+  mongo-db:
+    write-concern:
+      journal: false
+    read-concern: local
+
+eureka:
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: '/api/v1/wishlist/v3/api-docs'
+
+logging:
+  level:
+    root: INFO
