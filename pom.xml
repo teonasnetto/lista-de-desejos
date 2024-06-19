@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -30,8 +30,6 @@
         <spring-cloud-starter-netflix.version>4.1.1</spring-cloud-starter-netflix.version>
 
         <mongock-spring.version>4.3.8</mongock-spring.version>
-        <flapdoodle.version>4.12.2</flapdoodle.version>
-        <flapdoodle.embed.mongo.spring30x.version>4.11.0</flapdoodle.embed.mongo.spring30x.version>
 
         <mapstruct.version>1.5.5.Final</mapstruct.version>
 

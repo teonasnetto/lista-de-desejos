@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Data
 public class WishlistDto {
 

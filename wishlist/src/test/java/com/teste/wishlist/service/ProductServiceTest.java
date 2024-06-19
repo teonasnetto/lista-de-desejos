@@ -1,24 +1,22 @@
 package com.teste.wishlist.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import com.teste.wishlist.model.ProductEntity;
+import com.teste.wishlist.repository.ProductRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
-import com.teste.wishlist.model.ProductEntity;
-import com.teste.wishlist.repository.ProductRepository;
-
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
-
+@ExtendWith(MockitoExtension.class)
 class ProductServiceTest {
 
     @Mock
@@ -28,7 +26,6 @@ class ProductServiceTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
         productService = new ProductService(productRepository);
     }
 
